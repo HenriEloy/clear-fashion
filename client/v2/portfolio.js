@@ -88,18 +88,21 @@ const fetchAll = async(page = 1, size = 12, brand="noBrand", recent=false, reaso
     /* je filtre les produits, ainsi la pagination est calculée après le filtrage*/
     if(recent){
       body.data.result = filterRecent(body.data.result);
+      if (body.data.result.length==0){return false;}
     }
 
     if(reasonable){
       body.data.result = body.data.result.filter(function(prod){
         return prod.price <= 50;
       });
+      if (body.data.result.length==0){return false;}
     }
 
     if(fav){
       body.data.result = body.data.result.filter(function(prod){
         return favList.includes(prod.uuid);
-      })
+      });
+      if (body.data.result.length==0){return false;}
     }
 
     /*j'affiche les brands dispo*/
@@ -159,10 +162,10 @@ const fetchAll = async(page = 1, size = 12, brand="noBrand", recent=false, reaso
  * @param  {Array} products
  */
 const renderProducts = products => {
-  const fragment = document.createDocumentFragment();
-  const div = document.createElement('div');
-
-  const template = products
+  if(products.length!=0){
+    const fragment = document.createDocumentFragment();
+    const div = document.createElement('div');
+    const template = products
     .map(product => {
 
       let checkString = "";
@@ -173,10 +176,10 @@ const renderProducts = products => {
       return `
       <div class="product" id="ID-${product.uuid}">
         <span>${product.brand}</span>
-        <a href="${product.link}">${product.name}</a>x
-        <span>${product.price}</span>
-        <button onclick="window.open('${product.link}','_blank');">Voir le produit</button>
-        <input class="fav-heart" type="checkbox" id="${product.uuid}" ${checkString}>
+        <h3>${product.name}</h3>
+        <span>${product.price}€</span></br>
+        <button onclick="window.open('${product.link}','_blank');">See more 👉</button>
+        <label for="fav-heart"><h5>👇 Add to favorites 👇</h5></label><input class="fav-heart" type="checkbox" id="${product.uuid}" ${checkString}>
       </div>
     `;
     })
@@ -184,8 +187,9 @@ const renderProducts = products => {
 
   div.innerHTML = template;
   fragment.appendChild(div);
-  sectionProducts.innerHTML = '<h2>Products</h2>';
+  sectionProducts.innerHTML = "<h2>Products :</h2>";
   sectionProducts.appendChild(fragment);
+  }
 };
 
 /**
@@ -224,7 +228,11 @@ const renderIndicators = pagination => {
   spanNbProducts.innerHTML = count;
 };
 
-let favList = JSON.parse(localStorage.getItem("favList"));
+let favList = [];
+try{
+  favList = JSON.parse(localStorage.getItem("favList"));
+}
+catch(error){}
 
 const render = (products, pagination, brand) => {
   renderProducts(products);
@@ -286,17 +294,32 @@ selectPage.addEventListener('change', async (event) => {
 selectBrand.addEventListener('change', async (event) => {
   const products = await fetchAll(currentPagination.currentPage, currentPagination.pageSize, event.target.value, recent, reasonable, sort, fav);
   brand = event.target.value;
-  setCurrentProducts(products);
-  render(currentProducts, currentPagination, brand);
+  if (products == false){
+    sectionProducts.innerHTML = "<h2>No products with those filters</h2>";
+    renderPagination(currentPagination);
+    renderIndicators(currentPagination);
+  }
+  else{
+    setCurrentProducts(products);
+    render(currentProducts, currentPagination, brand);
+  }
   spanNbBrands.innerHTML = "1";
+  
 });
 
 recentCheckBox.addEventListener('change', async(event) => {
   if (event.currentTarget.checked) {
     recent = true;
     const products = await fetchAll(1, currentPagination.pageSize, brand, recent, reasonable, sort, fav);
-    setCurrentProducts(products);
-    render(currentProducts, currentPagination, brand);
+    if (products == false){
+      sectionProducts.innerHTML = "<h2>No products with those filters</h2>";
+      renderPagination(currentPagination);
+      renderIndicators(currentPagination);
+    }
+    else{
+      setCurrentProducts(products);
+      render(currentProducts, currentPagination, brand);
+    }
   }
   else{
     recent = false;
@@ -310,8 +333,15 @@ reasonnableCheckBox.addEventListener('change', async(event) => {
   if (event.currentTarget.checked) {
     reasonable = true;
     const products = await fetchAll(1, currentPagination.pageSize, brand, recent, reasonable, sort, fav);
-    setCurrentProducts(products);
-    render(currentProducts, currentPagination, brand);
+    if (products == false){
+      sectionProducts.innerHTML = "<h2>No products with those filters</h2>";
+      renderPagination(currentPagination);
+      renderIndicators(currentPagination);
+    }
+    else{
+      setCurrentProducts(products);
+      render(currentProducts, currentPagination, brand);
+    }
   }
   else{
     reasonable = false;
@@ -325,8 +355,15 @@ favCheckbox.addEventListener('change', async(event) => {
   if (event.currentTarget.checked) {
     fav = true;
     const products = await fetchAll(1, currentPagination.pageSize, brand, recent, reasonable, sort, fav);
-    setCurrentProducts(products);
-    render(currentProducts, currentPagination, brand);
+    if (products == false){
+      sectionProducts.innerHTML = "<h2>No products with those filters</h2>";
+      renderPagination(currentPagination);
+      renderIndicators(currentPagination);
+    }
+    else{
+      setCurrentProducts(products);
+      render(currentProducts, currentPagination, brand);
+    }
   }
   else{
     fav = false;

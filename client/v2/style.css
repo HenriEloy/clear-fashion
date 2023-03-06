@@ -1,0 +1,135 @@
+/* Global styles */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin-top: 2rem;
+  }
+  
+  section {
+    margin: 2rem auto;
+    max-width: 80%;
+  }
+  
+  /* Options section */
+  
+  #options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  #show,
+  #page,
+  #filters,
+  #brand,
+  #sort {
+    display: flex;
+    align-items: center;
+  }
+  
+  #show-select,
+  #page-select,
+  #brand-select,
+  #sort-select {
+    margin-left: 1rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 1rem;
+    border-radius: 0.25rem;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    color: #333;
+  }
+  
+  #filters input[type="checkbox"] {
+    margin-right: 0.5rem;
+  }
+  
+  #filters span {
+    margin-right: 1rem;
+  }
+  
+  /* Indicators section */
+  
+  #indicators {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  #indicators h2 {
+    width: 100%;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+  }
+  
+  #indicators div {
+    margin-top: 1rem;
+    flex-basis: 30%;
+  }
+  
+  #indicators span {
+    display: block;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  #indicators span:last-child {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  /* Products section */
+  
+  #products {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .product-row {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  /* Product card */
+  
+  .product {
+    flex-basis: calc(33.33% - 1rem);
+    margin-bottom: 2rem;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+  }
+  
+  .product button {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border-radius: 0.25rem;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  .product button:hover {
+    background-color: #555;
+  }
+  
+  
+  
