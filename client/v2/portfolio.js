@@ -229,10 +229,11 @@ const renderIndicators = pagination => {
 };
 
 let favList = [];
-try{
-  favList = JSON.parse(localStorage.getItem("favList"));
+const pull = JSON.parse(localStorage.getItem("favList"));
+
+if(pull!=null){
+  favlist=pull;
 }
-catch(error){}
 
 const render = (products, pagination, brand) => {
   renderProducts(products);
