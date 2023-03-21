@@ -42,8 +42,8 @@ async function init(){
   //await query_Brand();
   //await query_Less50();
   //await query_SortByPrice();
-  //await query_SortByPrice();
-  await query_recentProd();
+  //await query_SortByDate();
+  //await query_recentProd();
 }
 
 
@@ -54,6 +54,7 @@ async function connectToMongo(finalProd) {
   const db =  client.db(MONGODB_DB_NAME)
 
   const collection = db.collection('products');
+  collection.drop();
   const result = await collection.insertMany(finalProd);
 
   client.close();
@@ -92,7 +93,7 @@ async function query_SortByPrice(){
   return productsSortedPrice;
 }
 
-async function query_SortByPrice(){
+async function query_SortByDate(){
   const client = await MongoClient.connect(MONGODB_URI, {'useNewUrlParser': true});
   const db =  client.db(MONGODB_DB_NAME)
   const collection = db.collection('products');

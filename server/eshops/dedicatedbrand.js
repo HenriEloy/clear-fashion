@@ -30,6 +30,7 @@ const use_montlimart = async (response) => {
   
   let products = [];
   for (const link of filteredLinks) {
+    console.log(link);
     const response = await fetch(link);
     const html = await response.text();
     const $ = cheerio.load(html);
@@ -55,10 +56,12 @@ const parse_montlimart = async ($) => {
     } else {
       product.image = $(elt).find('.product-miniature__thumb img')[0].attribs["data-src"];
     }
-    product.scrapedate = Date.now();
+    product.date = Date.now();
     return product;
   }));
-  const filteredProducts = products.filter(product => ![...product.name].includes("CADEAU"));
+  let filteredProducts = products.filter(product => ![...product.name].includes("CADEAU"));
+  //console.log(filteredProducts);
+  //filteredProducts = filteredProducts.filter(product => !product.name != null);
   return filteredProducts;
   
 };
@@ -73,7 +76,7 @@ const parse_circle = data => {
     product.link = "https://shop.circlesportswear.com" + $(element).find("h3.h5 .full-unstyled-link").attr("href");
     product.image = "https:" + $(element).find("img").attr("src");
     product.brand = "Circle";
-    product.scrapedate = Date.now();
+    product.date = Date.now();
     products.push(product);
   });
   return products;
